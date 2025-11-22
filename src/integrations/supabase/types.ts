@@ -14,7 +14,147 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contact_submissions: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          message: string
+          name: string
+          phone: string | null
+          project_type: string
+          status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          message: string
+          name: string
+          phone?: string | null
+          project_type: string
+          status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          project_type?: string
+          status?: string | null
+        }
+        Relationships: []
+      }
+      portfolios: {
+        Row: {
+          category: string
+          client_name: string | null
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          id: string
+          image_url: string
+          location: string | null
+          project_date: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          client_name?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url: string
+          location?: string | null
+          project_date?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          client_name?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string
+          location?: string | null
+          project_date?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      service_packages: {
+        Row: {
+          created_at: string | null
+          display_order: number | null
+          features: Json
+          id: string
+          is_highlighted: boolean | null
+          name: string
+          price_text: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          display_order?: number | null
+          features?: Json
+          id?: string
+          is_highlighted?: boolean | null
+          name: string
+          price_text: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          display_order?: number | null
+          features?: Json
+          id?: string
+          is_highlighted?: boolean | null
+          name?: string
+          price_text?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          created_at: string | null
+          display_order: number | null
+          id: string
+          name: string
+          rating: number | null
+          role: string
+          text: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          name: string
+          rating?: number | null
+          role: string
+          text: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          name?: string
+          rating?: number | null
+          role?: string
+          text?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -3,40 +3,38 @@ import { useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { Quote, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Testimonial {
+  id: string;
+  name: string;
+  role: string;
+  text: string;
+  rating: number;
+}
 
 export const Testimonials = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  const testimonials = [
-    {
-      name: "Budi Santoso",
-      role: "Pemilik Villa Modern",
-      text: "Ruangtiva Studio berhasil mewujudkan impian kami memiliki villa modern yang elegan. Tim sangat profesional dan detail dalam setiap aspek desain.",
-      rating: 5,
-    },
-    {
-      name: "Sarah Wijaya",
-      role: "CEO Startup Tech",
-      text: "Desain kantor kami mencerminkan budaya perusahaan yang inovatif. Proses kolaborasi sangat menyenangkan dan hasilnya melebihi ekspektasi.",
-      rating: 5,
-    },
-    {
-      name: "Ahmad Rahman",
-      role: "Pemilik Kafe",
-      text: "Interior kafe kami menjadi daya tarik tersendiri. Ruangtiva Studio memahami konsep yang kami inginkan dan mengeksekusinya dengan sempurna.",
-      rating: 5,
-    },
-    {
-      name: "Diana Kusuma",
-      role: "Developer Properti",
-      text: "Kerjasama yang sangat baik dalam proyek apartemen kami. Perhitungan struktur akurat dan desain yang menarik untuk target pasar.",
-      rating: 5,
-    },
-  ];
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
 
   useEffect(() => {
+    fetchTestimonials();
+  }, []);
+
+  const fetchTestimonials = async () => {
+    const { data } = await supabase
+      .from("testimonials")
+      .select("*")
+      .order("display_order");
+    
+    if (data) setTestimonials(data);
+  };
+
+  useEffect(() => {
+    if (testimonials.length === 0) return;
+    
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % testimonials.length);
     }, 5000);
@@ -71,14 +69,15 @@ export const Testimonials = () => {
 
         <div className="max-w-4xl mx-auto relative">
           <AnimatePresence mode="wait">
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
-              transition={{ duration: 0.5 }}
-              className="bg-gradient-to-br from-navy to-navy/80 p-12 rounded-2xl relative"
-            >
+            {testimonials.length > 0 && (
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -100 }}
+                transition={{ duration: 0.5 }}
+                className="bg-gradient-to-br from-navy to-navy/80 p-12 rounded-2xl relative"
+              >
               <Quote className="w-16 h-16 text-gold/20 absolute top-8 left-8" />
               
               <div className="relative z-10">
@@ -113,7 +112,8 @@ export const Testimonials = () => {
                   ))}
                 </div>
               </div>
-            </motion.div>
+              </motion.div>
+            )}
           </AnimatePresence>
 
           {/* Navigation */}
