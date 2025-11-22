@@ -1,53 +1,41 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Package {
+  id: string;
+  name: string;
+  price_text: string;
+  features: string[];
+  is_highlighted: boolean;
+}
 
 export const Packages = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [packages, setPackages] = useState<Package[]>([]);
 
-  const packages = [
-    {
-      name: "Basic",
-      price: "Mulai 5 Juta",
-      features: [
-        "Konsultasi awal",
-        "Konsep desain 2D",
-        "2x revisi",
-        "Gambar kerja dasar",
-      ],
-      highlighted: false,
-    },
-    {
-      name: "Professional",
-      price: "Mulai 12 Juta",
-      features: [
-        "Konsultasi mendalam",
-        "Konsep desain 2D & 3D",
-        "4x revisi",
-        "Gambar kerja lengkap",
-        "Perhitungan struktur",
-        "Spesifikasi material",
-      ],
-      highlighted: true,
-    },
-    {
-      name: "Premium",
-      price: "Mulai 25 Juta",
-      features: [
-        "Konsultasi unlimited",
-        "Konsep 2D & 3D detail",
-        "Revisi unlimited",
-        "Gambar kerja penuh",
-        "Perhitungan struktur",
-        "Pendampingan konstruksi",
-        "Desain MEP",
-      ],
-      highlighted: false,
-    },
-  ];
+  useEffect(() => {
+    fetchPackages();
+  }, []);
+
+  const fetchPackages = async () => {
+    const { data } = await supabase
+      .from("service_packages")
+      .select("*")
+      .order("display_order");
+    
+    if (data) {
+      const formattedPackages = data.map(pkg => ({
+        ...pkg,
+        features: Array.isArray(pkg.features) ? pkg.features as string[] : []
+      }));
+      setPackages(formattedPackages);
+    }
+  };
 
   return (
     <section ref={ref} className="py-24 bg-background">
@@ -69,17 +57,17 @@ export const Packages = () => {
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {packages.map((pkg, index) => (
             <motion.div
-              key={index}
+              key={pkg.id}
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.1 * index }}
               className={`relative bg-card rounded-xl p-8 border-2 transition-all duration-300 hover:shadow-2xl ${
-                pkg.highlighted
+                pkg.is_highlighted
                   ? "border-gold shadow-xl scale-105 bg-gradient-to-b from-gold/5 to-transparent"
                   : "border-border hover:border-gold"
               }`}
             >
-              {pkg.highlighted && (
+              {pkg.is_highlighted && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gold text-carbon px-6 py-1 rounded-full text-sm font-semibold">
                   Paling Populer
                 </div>
@@ -89,7 +77,7 @@ export const Packages = () => {
                 <h3 className="font-heading text-2xl font-bold text-navy mb-2">
                   {pkg.name}
                 </h3>
-                <p className="text-3xl font-bold text-gold">{pkg.price}</p>
+                <p className="text-3xl font-bold text-gold">{pkg.price_text}</p>
               </div>
 
               <ul className="space-y-4 mb-8">
@@ -103,7 +91,7 @@ export const Packages = () => {
 
               <Button
                 className={`w-full ${
-                  pkg.highlighted
+                  pkg.is_highlighted
                     ? "bg-gold hover:bg-gold/90 text-carbon"
                     : "bg-navy hover:bg-navy/90 text-white"
                 }`}
