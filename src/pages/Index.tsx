@@ -1,12 +1,39 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { Hero } from "@/components/Hero";
+import { About } from "@/components/About";
+import { Commitment } from "@/components/Commitment";
+import { Services } from "@/components/Services";
+import { Philosophy } from "@/components/Philosophy";
+import { Advantages } from "@/components/Advantages";
+import { VisionMission } from "@/components/VisionMission";
+import { Values } from "@/components/Values";
+import { ServiceScope } from "@/components/ServiceScope";
+import { ProjectTypes } from "@/components/ProjectTypes";
+import { Packages } from "@/components/Packages";
+import { Process } from "@/components/Process";
+import { PortfolioCTA } from "@/components/PortfolioCTA";
+import { Testimonials } from "@/components/Testimonials";
+import { Contact } from "@/components/Contact";
+import { Footer } from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="overflow-x-hidden">
+      <Hero />
+      <About />
+      <Commitment />
+      <Services />
+      <Philosophy />
+      <Advantages />
+      <VisionMission />
+      <Values />
+      <ServiceScope />
+      <ProjectTypes />
+      <Packages />
+      <Process />
+      <PortfolioCTA />
+      <Testimonials />
+      <Contact />
+      <Footer />
     </div>
   );
 };
